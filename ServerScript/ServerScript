@@ -1,0 +1,63 @@
+--ServerScriptService.Script
+local Players = game:GetService("Players")
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local quizResultEvent = ReplicatedStorage:WaitForChild("QuizResult")
+
+local ServerStorage = game:GetService("ServerStorage")
+local quizData = require(ServerStorage:WaitForChild("QuizData"))
+
+local quizDoors = game:GetService("Workspace"):WaitForChild("Trake"):WaitForChild("QuizDoors")
+
+local doorPositions = {
+	["0"] = quizDoors:WaitForChild("SpawnLocation").Position,
+	["1"] = quizDoors:WaitForChild("QuizDoor1").Position,
+	["2"] = quizDoors:WaitForChild("QuizDoor2").Position,
+	["3"] = quizDoors:WaitForChild("QuizDoor3").Position,
+}
+
+
+
+quizResultEvent.OnServerEvent:Connect(function(player, quizID, qIndex, answer)
+	local correct = quizData[quizID].questions[qIndex].answer
+
+	if answer == correct then
+		print(player.Name .. " passed quiz " .. quizID)
+		
+		player:SetAttribute("LastCheckpointID", quizID)
+		player:SetAttribute("Quiz" .. quizID, true)
+		player:SetAttribute("qIndex", 0)
+
+		local attributes = player:GetAttributes()
+
+		for name, value in pairs(attributes) do
+			print("Attribute:", name, "→", value)
+		end
+
+		local character = player.Character
+		if character then
+			for _, part in character:GetChildren() do
+				if part:IsA("BasePart") then
+					part.CollisionGroup = "QuizPassed"
+				end
+			end
+		end
+	else		
+		print("Wrong Answer. Teleporting back to Lastcheckpoint.")
+		
+		
+		local lastID = player:GetAttribute("LastCheckpointID") or "0"
+		local doorPos = doorPositions[lastID]
+
+		if doorPos then
+			local character = player.Character
+			if character and character:FindFirstChild("HumanoidRootPart") then
+				player:SetAttribute("qIndex", 0)
+				local offset = Vector3.new(0, 5, 0)
+				character:PivotTo(CFrame.new(doorPos + offset))				
+			end
+		else
+			warn("No door position found for checkpoint ID:", lastID)
+		end		
+	end
+end)

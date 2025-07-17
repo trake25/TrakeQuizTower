@@ -1,0 +1,79 @@
+--Every Quiz Door Script
+local door = script.Parent
+
+local quizID = door:GetAttribute("QuizID")
+local Players = game:GetService("Players")
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local showQuizEvent = ReplicatedStorage:WaitForChild("ShowQuiz")
+
+local ServerStorage = game:GetService("ServerStorage")
+local quizData = require(ServerStorage:WaitForChild("QuizData"))
+
+local qIndex = nil
+local question = nil
+local choices = {}
+
+local prompt = door:FindFirstChildOfClass("ProximityPrompt")
+
+if not prompt then
+	warn("No ProximityPrompt found in door")
+	return
+end
+
+prompt.Triggered:Connect(function(player)
+	if not player or not player:IsA("Player") then return end
+
+	local character = player.Character
+	if not character then return end
+	
+	if player:GetAttribute("IsInQuiz") then
+		print(player.Name .. " is currently in a quiz.")
+		return
+	end
+	
+	if player:GetAttribute("Quiz" .. quizID) then
+		print(player.Name .. " already passed quiz " .. quizID)
+		return
+	end
+	
+	qIndex = player:GetAttribute("qIndex")
+	
+	if qIndex == nil or qIndex == 0 then
+		local questionsList = quizData[quizID].questions
+		qIndex = math.random(1, #questionsList)
+		player:SetAttribute("qIndex", qIndex)
+		local questionSet = questionsList[qIndex]
+		question = questionSet.question
+		choices = questionSet.choices
+	end
+	
+	print("qIndex: "..player:GetAttribute("qIndex"))
+	
+	showQuizEvent:FireClient(player, quizID, qIndex, question, choices)
+	
+end)
+
+door.Touched:Connect(function(hit)
+	local character = hit.Parent
+	local player = Players:GetPlayerFromCharacter(character)
+	if not player or not character then return end
+
+	if player:GetAttribute("Quiz" .. quizID) then
+		if hit.CollisionGroup ~= "QuizPassed" then
+			for _, part in character:GetChildren() do
+				if part:IsA("BasePart") then
+					part.CollisionGroup = "QuizPassed"
+				end
+			end
+		end
+	else
+		if hit.CollisionGroup ~= "Default" then
+			for _, part in character:GetChildren() do
+				if part:IsA("BasePart") then
+					part.CollisionGroup = "Default"
+				end
+			end
+		end
+	end
+end)

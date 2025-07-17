@@ -1,0 +1,63 @@
+--StarterGui.LibraryGui.Frame.LibraryGuiScript
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
+
+local player = Players.LocalPlayer
+
+local showLibraryEvent = ReplicatedStorage:WaitForChild("ShowLibrary") -- server ➜ client
+
+local frame = script.Parent
+local questionLabel = frame:WaitForChild("Question")
+local answerLabel = frame:WaitForChild("Answer")
+
+local lastIndex = nil
+
+-- Freeze player movement
+local function freezePlayer()
+	local character = player.Character or player.CharacterAdded:Wait()
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.WalkSpeed = 0
+		humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, false)
+	end
+	player:SetAttribute("IsInLibrary", true)
+end
+
+-- Unfreeze player movement
+local function unfreezePlayer()
+	local character = player.Character or player.CharacterAdded:Wait()
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		if player:GetAttribute("RunningShoes") then
+			humanoid.WalkSpeed = 32
+		else
+			humanoid.WalkSpeed = 16
+		end
+		humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, true)
+	end
+	player:SetAttribute("IsInLibrary", false)
+end
+
+-- Receive quiz data from server
+showLibraryEvent.OnClientEvent:Connect(function(libraryData)
+	if frame.Visible then 
+		frame.Visible = false
+		unfreezePlayer()
+		return
+	end 
+
+	freezePlayer()
+	local questions = libraryData.questions
+	local randomNumber
+	repeat
+		randomNumber = math.random(1, #questions)
+	until randomNumber ~= lastIndex
+	lastIndex = randomNumber
+	local answer = questions[randomNumber].answer
+	local answerText = questions[randomNumber].choices[answer]
+	questionLabel.Text = questions[randomNumber].question
+	answerLabel.Text = answerText
+	frame.Visible = true
+end)
+
+

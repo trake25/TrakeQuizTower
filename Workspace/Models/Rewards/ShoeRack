@@ -1,0 +1,21 @@
+-- 1st quiz reward powerups
+local prompt = script.Parent:FindFirstChildOfClass("ProximityPrompt")
+local Players = game:GetService("Players")
+
+prompt.Triggered:Connect(function(player)
+	
+	print("Interacting with Shoe Rack")
+	if player:GetAttribute("Quiz1") then
+		local character = player.Character
+		if character then
+			local humanoid = character:FindFirstChildOfClass("Humanoid")
+			if humanoid then
+				humanoid.WalkSpeed = 32
+				player:SetAttribute("RunningShoes", true)
+				print(player.Name .. " got new shoes! Speed boosted: " .. humanoid.WalkSpeed)
+			end
+		end
+	else
+		print(player.Name .. " hasn't passed Quiz 1 yet.")
+	end
+end)

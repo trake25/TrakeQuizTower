@@ -1,2 +1,3 @@
 # TrakeQuizTower
-Trake's Quiz Tower using Roblox Studio and Lua
+Trake's Kids Quiz Tower using Roblox Studio and Lua Scripting
+

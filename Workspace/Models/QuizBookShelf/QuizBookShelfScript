@@ -1,0 +1,33 @@
+--Every Quiz Bookshelf Script
+local bookShelf = script.Parent
+local Players = game:GetService("Players")
+
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local showLibraryEvent = ReplicatedStorage:WaitForChild("ShowLibrary")
+
+local ServerStorage = game:GetService("ServerStorage")
+local quizData = require(ServerStorage:WaitForChild("QuizData"))
+
+local libraryID = bookShelf:GetAttribute("LibraryID")
+
+local prompt = bookShelf:FindFirstChildOfClass("ProximityPrompt")
+
+if not prompt then
+	warn("No ProximityPrompt found in door")
+	return
+end
+
+prompt.Triggered:Connect(function(player)
+	if not player or not player:IsA("Player") then return end
+
+	local character = player.Character
+	if not character then return end
+
+	if player:GetAttribute("IsInLibrary") then
+		print(player.Name .. " is currently in a library.")
+		return
+	end
+	
+	local libraryData = quizData[libraryID]
+	showLibraryEvent:FireClient(player, libraryData)
+end)

@@ -1,0 +1,146 @@
+-- Modular Script
+return {
+	["1"] = { -- Entrance Door (Easy Math)
+		questions = {
+			{
+				question = "Addition: 2 + 2 = ?",
+				choices = {"3", "4", "1", "6"},
+				answer = 2
+			},
+			{
+				question = "Subtraction: 5 - 3 = ?",
+				choices = {"1", "2", "3", "4"},
+				answer = 2
+			},
+			{
+				question = "Division: 4 ÷ 2 = ?",	
+				choices = {"4", "2", "1", "8"},
+				answer = 2
+			},
+			{
+				question = "Multiplication: 3 x 3 = ?",
+				choices = {"6", "9", "3", "15"},
+				answer = 2
+			},
+			{
+				question = "Choose a number greater than 5: (4, 6, 0, 2)",
+				choices = {"4", "6", "0", "2"},
+				answer = 2
+			},
+			{
+				question = "Choose a number less than 10: (11,1,22,34)",
+				choices = {"11", "1", "22", "34"},
+				answer = 2
+			}
+		}
+	},
+
+	["2"] = { -- 1st Floor Ladder Door (Easy Science)
+		questions = {
+			{
+				question = "Which planet do you live on?",
+				choices = {"Sun", "Moon", "Earth", "Mars"},
+				answer = 3
+			},
+			{
+				question = "What do humans need to breathe?",
+				choices = {"Water", "Oxygen", "Carbon", "Helium"},
+				answer = 2
+			},
+			{
+				question = "What does the Sun give us?",
+				choices = {"Light", "Ice", "Darkness", "Rain"},
+				answer = 1
+			},
+			{
+				question = "Which sense helps you see?",
+				choices = {"Hearing", "Smell", "Touch", "Sight"},
+				answer = 4
+			},
+			{
+				question = "What is the young one of a dog called?",
+				choices = {"Pony", "Kitten", "Puppy", "Pop"},
+				answer = 3
+			},
+			{
+				question = "Where do fish live?",
+				choices = {"Forest", "Sky", "Sea", "Desert"},
+				answer = 3
+			}
+		}
+	},
+
+	["3"] = { -- 2nd Floor Ladder Door (Medium Math + Science)
+		questions = {
+			-- Math
+			{
+				question = "Division: 12 ÷ 3?",
+				choices = {"4", "3", "6", "2"},
+				answer = 1
+			},
+			{
+				question = "Multiplication: 9 x 6?",
+				choices = {"63", "54", "96", "45"},
+				answer = 2
+			},
+			{
+				question = "Which is the smallest: 0.5, 0.3, 0.8, 0.9?",
+				choices = {"0.3", "0.5", "0.8", "0.9"},
+				answer = 1
+			},
+			-- Science
+			{
+				question = "Which gas do plants need to make food?",
+				choices = {"Oxygen", "Carbon Dioxide", "Nitrogen", "Hydrogen"},
+				answer = 2
+			},
+			{
+				question = "What part of the plant takes in water?",
+				choices = {"Leaves", "Stem", "Flowers", "Roots"},
+				answer = 4
+			},
+			{
+				question = "Which is a renewable energy source?",
+				choices = {"Coal", "Oil", "Solar", "Gasoline"},
+				answer = 3
+			}
+		}
+	},
+	
+	["4"] = { -- Top Tower Door (Hard Math + Science)
+		questions = {
+			-- Math
+			{
+				question = "Multiplication: 15 x 10 = ?",
+				choices = {"151", "105", "25", "150"},
+				answer = 4
+			},
+			{
+				question = "You saw six apples on the ground, you picked two in your right hand. How many apples in your left hand?",
+				choices = {"2", "0", "6", "4"},
+				answer = 2
+			},
+			{
+				question = "Mark found ten gold coins in the treasure chest. He shared two gold coins to you. How many gold coins does Mark have left?",
+				choices = {"2", "8", "10", "12"},
+				answer = 1
+			},
+			-- Science
+			{
+				question = "The tower wizard is using magic fireballs to shoot you. What magic do you need to defeat fire?",
+				choices = {"Wood", "Water", "Air", "Paper"},
+				answer = 2
+			},
+			{
+				question = "Which nutrient plays an essential role in muscle-building?",
+				choices = {"Vitamin M", "Carbohydrate", "Fat", "Protein"},
+				answer = 4
+			},
+			{
+				question = "What’s the name for animals that only eat plants?",
+				choices = {"Cow", "Goat", "Herbivores", "Grass-muncher"},
+				answer = 3
+			}
+		}
+	}
+}
