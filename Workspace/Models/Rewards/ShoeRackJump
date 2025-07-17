@@ -1,0 +1,28 @@
+local prompt = script.Parent:FindFirstChildOfClass("ProximityPrompt")
+local Players = game:GetService("Players")
+
+prompt.Triggered:Connect(function(player)
+	print("Interacting with Jumping Shoe Rack")
+
+	if not player:GetAttribute("Quiz2") then
+		print(player.Name .. " hasn't passed Quiz 2 yet.")
+		return
+	end
+
+	if player:GetAttribute("JumpingShoes") then
+		print(player.Name .. " already has jumping shoes.")
+		return
+	end
+
+	local character = player.Character
+	if not character then return end
+
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if not humanoid then return end
+	
+	humanoid.UseJumpPower = true
+	humanoid.JumpPower = 120        -- Boost jump power (default is around 50)
+
+	player:SetAttribute("JumpingShoes", true)
+	print(player.Name .. " got jumping shoes! JumpPower is now " .. humanoid.JumpPower)
+end)

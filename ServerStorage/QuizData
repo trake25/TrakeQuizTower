@@ -116,14 +116,14 @@ return {
 				answer = 4
 			},
 			{
-				question = "You saw six apples on the ground, you picked two in your right hand. How many apples in your left hand?",
-				choices = {"2", "0", "6", "4"},
+				question = "You saw six apples on the ground, you picked one and hold in your right hand. How many apples in your left hand?",
+				choices = {"5", "0", "1", "6"},
 				answer = 2
 			},
 			{
 				question = "Mark found ten gold coins in the treasure chest. He shared two gold coins to you. How many gold coins does Mark have left?",
 				choices = {"2", "8", "10", "12"},
-				answer = 1
+				answer = 2
 			},
 			-- Science
 			{

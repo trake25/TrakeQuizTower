@@ -1,0 +1,55 @@
+-- TowerWinnersGui
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local showWinnersEvent = ReplicatedStorage:WaitForChild("ShowWinners")
+
+local player = game.Players.LocalPlayer
+local playerGui = player:WaitForChild("PlayerGui")
+
+local frame = script.Parent
+local scrollingFrame = frame:WaitForChild("ScrollingFrame")
+local winnersListTextLabel = scrollingFrame:WaitForChild("WinnersText")
+local closeButton = frame:WaitForChild("CloseButton")
+
+-- Freeze player movement
+local function freezePlayer()
+	local character = player.Character or player.CharacterAdded:Wait()
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		humanoid.WalkSpeed = 0
+		humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, false)
+	end
+	player:SetAttribute("IsInWinList", true)
+end
+
+-- Unfreeze player movement
+local function unfreezePlayer()
+	local character = player.Character or player.CharacterAdded:Wait()
+	local humanoid = character:FindFirstChildOfClass("Humanoid")
+	if humanoid then
+		if player:GetAttribute("RunningShoes") then
+			humanoid.WalkSpeed = 32
+		else
+			humanoid.WalkSpeed = 16
+		end
+		humanoid:SetStateEnabled(Enum.HumanoidStateType.Jumping, true)
+	end
+	player:SetAttribute("IsInWinList", false)
+end
+
+
+showWinnersEvent.OnClientEvent:Connect(function(winnerList)
+	if frame.Visible then 
+		frame.Visible = false
+		unfreezePlayer()
+		return
+	end 
+
+	freezePlayer()
+	winnersListTextLabel.Text = "Tower Winners:\n" .. table.concat(winnerList, "\n")	
+	frame.Visible = true
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+	frame.Visible = false
+	unfreezePlayer()
+end)

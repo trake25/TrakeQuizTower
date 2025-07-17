@@ -1,4 +1,3 @@
--- 1st quiz reward powerups
 local prompt = script.Parent:FindFirstChildOfClass("ProximityPrompt")
 local Players = game:GetService("Players")
 

@@ -16,6 +16,40 @@ local doorPositions = {
 	["3"] = quizDoors:WaitForChild("QuizDoor3").Position,
 }
 
+local TowerWinners = ServerStorage:WaitForChild("TowerWinners")
+
+local function showWinnersList(player)
+	local names = {}
+
+	for _, tag in ipairs(TowerWinners:GetChildren()) do
+		if tag:IsA("StringValue") then
+			table.insert(names, tag.Name .. " (" .. tag.Value .. ")")
+		end
+	end
+
+	if #names == 0 then
+		table.insert(names, "No winners yet!")
+	end
+
+	ReplicatedStorage:WaitForChild("ShowWinners"):FireClient(player, names)
+end
+
+local function addWinnerEffect(player)
+	local character = player.Character or player.CharacterAdded:Wait()
+
+	
+	if character:FindFirstChild("WinnerHighlight") then return end
+
+	local highlight = Instance.new("Highlight")
+	highlight.Name = "WinnerHighlight"
+	highlight.FillColor = Color3.fromRGB(255, 215, 0) -- Gold
+	highlight.OutlineColor = Color3.fromRGB(255, 255, 255) -- White
+	highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+	highlight.FillTransparency = 0.5
+	highlight.OutlineTransparency = 0.2
+	highlight.Adornee = character
+	highlight.Parent = character
+end
 
 
 quizResultEvent.OnServerEvent:Connect(function(player, quizID, qIndex, answer)
@@ -42,6 +76,27 @@ quizResultEvent.OnServerEvent:Connect(function(player, quizID, qIndex, answer)
 				end
 			end
 		end
+		
+		if player:GetAttribute("Quiz4") then
+			print("Player passed all quizzes!")
+
+			local trophyFolder = ServerStorage:FindFirstChild("TowerWinners")
+			if trophyFolder then
+				if not trophyFolder:FindFirstChild(player.Name) then
+					local winnerTag = Instance.new("StringValue")
+					winnerTag.Name = player.Name
+					winnerTag.Value = os.date("%B %d, %Y - %H:%M")
+					winnerTag.Parent = trophyFolder
+					player:SetAttribute("TowerWinner", true)
+					print(player.Name .. " added to TowerWinners.")
+					addWinnerEffect(player)
+					showWinnersList(player)		
+					
+				end
+			end
+		end
+
+		
 	else		
 		print("Wrong Answer. Teleporting back to Lastcheckpoint.")
 		

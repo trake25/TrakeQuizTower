@@ -1,0 +1,24 @@
+local player = game.Players.LocalPlayer
+
+local function addWinnerEffect(player)
+	local character = player.Character or player.CharacterAdded:Wait()
+
+
+	if character:FindFirstChild("WinnerHighlight") then return end
+
+	local highlight = Instance.new("Highlight")
+	highlight.Name = "WinnerHighlight"
+	highlight.FillColor = Color3.fromRGB(255, 215, 0) -- Gold
+	highlight.OutlineColor = Color3.fromRGB(255, 255, 255) -- White
+	highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+	highlight.FillTransparency = 0.5
+	highlight.OutlineTransparency = 0.2
+	highlight.Adornee = character
+	highlight.Parent = character
+end
+
+player.CharacterAdded:Connect(function(character)
+	if player:GetAttribute("TowerWinner") then
+		addWinnerEffect(player)
+	end
+end)
